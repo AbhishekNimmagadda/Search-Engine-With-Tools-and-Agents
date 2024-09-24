@@ -1,0 +1,61 @@
+How the Tools Work
+
+API Wrappers:
+ArxivAPIWrapper and WikipediaAPIWrapper are custom wrappers around their respective APIs (Arxiv and Wikipedia). These wrappers are configured to return a limited number of results (top_k_results=1) and truncate the content to a maximum number of characters (doc_content_chars_max=200).
+DuckDuckGoSearchRun is another tool that uses DuckDuckGo's search capabilities to retrieve web search results.
+
+Tool Initialization:
+Each tool (Arxiv, Wikipedia, DuckDuckGo) is initialized using these wrappers. For example:
+arxiv=ArxivQueryRun(api_wrapper=arxiv_wrapper) wraps the Arxiv API to return search results.
+wiki=WikipediaQueryRun(api_wrapper=api_wrapper) does the same for Wikipedia.
+
+These tools are essentially small functions that can query their respective data sources and return relevant content based on a user query.
+
+How the Agent Works
+Language Model Initialization:
+The ChatGroq model is instantiated with the user's Groq API key. This model (like Llama) is responsible for generating responses based on the conversation context.
+The model is set to stream its output (streaming=True), meaning it can generate responses in real-time.
+
+Agent Setup:
+Tools Integration: The tools (search, arxiv, wiki) are provided as a list to the agent. These tools are available for the agent to use when trying to answer a user query.
+Agent Type: The agent is initialized as ZERO_SHOT_REACT_DESCRIPTION, a type of agent that uses zero-shot learning to choose which tool to use based on the description of the tools and the query at hand.
+Error Handling: The agent is configured to handle parsing errors (handling_parsing_errors=True), which makes it robust to potential issues that may arise during processing.
+
+Agent's Workflow:
+Receiving User Input: When the user submits a query, the agent takes the current conversation context (all messages in the session state) and uses it to understand what the user is asking.
+Choosing a Tool: Based on the query, the agent decides which tool (e.g., Arxiv, Wikipedia, DuckDuckGo) is most appropriate to use. It might search for a scholarly article on Arxiv, fetch a Wikipedia summary, or perform a web search.
+Using the Tool: The agent runs the selected tool with the user's query. For instance, if the user asks about "machine learning," the agent might search for the most relevant Arxiv paper or Wikipedia article.
+Generating a Response: The agent processes the results from the tools and then generates a coherent response using the ChatGroq model. This response is then displayed to the user.
+Interactivity and Feedback:
+The agent’s thoughts and actions are displayed in real-time using the StreamlitCallbackHandler. This gives users visibility into what the agent is doing at each step (e.g., "Searching Arxiv for relevant papers...").
+The final response is shown in the chat interface, completing the interaction.
+Summary
+Tools: They provide specialized search capabilities (Arxiv for academic papers, Wikipedia for summaries, DuckDuckGo for web searches).
+Agent: It orchestrates these tools, deciding which one to use based on the user's query, runs the necessary search, and then generates a response using the results and the language model, all while giving real-time feedback in the chat interface.
+
+
+
+
+
+1. Start with the Purpose
+What it does: "This app is like a smart chatbot that can help you find information from the web, academic papers, and Wikipedia. Imagine you have a question, and this app can quickly search different places to give you an answer."
+Why it's useful: "It's useful for anyone who needs to quickly gather information from multiple sources without having to search each one manually."
+2. Show the User Interface
+Sidebar: "On the left side, you can enter your special key to access the chatbot. This key is like a password that allows the app to connect to a smart system."
+Chat Area: "This is where you can chat with the app. You type in your question at the bottom, and the app will reply in this space."
+3. Demonstrate How to Use It
+Entering a Query: "Let’s say you want to learn about 'machine learning.' You just type your question here..." (Type in "What is machine learning?" and hit enter).
+Explanation of the Process: "The app now thinks about the best way to find the answer. It can search the web, look at Wikipedia, or even find academic papers."
+4. Explain What Happens Behind the Scenes (Simplified)
+Tool Selection: "The app decides which source is the best to answer your question. For example, if it's a technical topic, it might look for an academic paper."
+Searching: "Once it decides, it goes out and finds the information. It’s like having a super-fast research assistant who knows where to look."
+Generating a Response: "After it finds the information, it writes up a clear answer and shows it here in the chat."
+5. Highlight the Interactive Aspect
+Real-time Updates: "As the app is working, you can see what it's doing in real-time. For example, you might see it say 'Searching Wikipedia' so you know exactly what’s happening."
+Continued Conversation: "You can keep asking follow-up questions, and the app will remember the conversation, just like talking to a real person."
+6. Conclude with the Benefits
+Easy and Efficient: "This app saves you time by pulling together information from different sources automatically."
+Versatile: "Whether you're a student, a researcher, or just curious, this app can help you get the information you need quickly and easily."
+7. Invite Them to Try It
+Interactive Demo: "Now, why don’t you try asking it something you’re curious about? It’s easy—just type your question, and see what it finds!"
+By focusing on the practical aspects of how the app works and using simple language, you'll make the demo accessible and engaging for someone without a deep tech background.
